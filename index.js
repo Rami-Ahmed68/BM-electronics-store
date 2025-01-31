@@ -41,6 +41,14 @@ app.use("/api/v1/bm/admin/get/one", get_one_admin);
 app.use("/api/v1/bm/admin/get/all", get_all_admin);
 // creating an admin's apis
 
+// import user's files
+const register_user = require("./src/router/auth/user/register");
+// import user's files
+
+// creating an user's apis
+app.use("/api/v1/bm/user/register", register_user);
+// creating an user's apis
+
 // import dollar's files
 const create_dollar = require("./src/router/dollar/create");
 const update_dollar = require("./src/router/dollar/update");

@@ -34,7 +34,7 @@ const user = new mongoose.Schema({
   },
   joind_adt: {
     type: Date,
-    required: true,
+    default: new Date(),
   },
 });
 
