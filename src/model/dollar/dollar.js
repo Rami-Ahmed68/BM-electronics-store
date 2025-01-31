@@ -7,7 +7,7 @@ const dollar = new mongoose.Schema({
   },
   last_update: {
     type: Date,
-    required: true,
+    default: new Date(),
   },
 });
 

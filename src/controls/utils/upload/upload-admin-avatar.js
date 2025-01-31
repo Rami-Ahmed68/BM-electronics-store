@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, callback) => {
     callback(
-      nnull,
+      null,
       new Date().toISOString().replace(/:/g, "-") + file.originalname
     );
   },
@@ -39,6 +39,6 @@ const upload_avatar = multer({
       );
     }
   },
-}).single("avatar");
+}).array("avatar");
 
 module.exports = upload_avatar;

@@ -3,7 +3,7 @@ const ApiError = require("../error/ApiError");
 const dotenv = require("dotenv");
 dotenv.config({ path: "../../../../config/.env" });
 
-const VerifyToken = async (header, next) => {
+const verify_token = async (header, next) => {
   // check if the header is exists
   if (!header || !header.startsWith("Bearer")) {
     return next(
@@ -38,4 +38,4 @@ const VerifyToken = async (header, next) => {
   return TokenData;
 };
 
-module.exports = VerifyToken;
+module.exports = verify_token;
