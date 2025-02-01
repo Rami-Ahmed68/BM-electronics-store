@@ -1,6 +1,6 @@
-const mongosoe = require("mongoose");
+const mongoose = require("mongoose");
 
-const product = new mongosoe.Schema({
+const product = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -30,12 +30,20 @@ const product = new mongosoe.Schema({
     type: String,
     required: true,
   },
+  tags: {
+    type: [String],
+  },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "admin",
+  },
   created_at: {
     type: Date,
     required: true,
   },
 });
 
-const Product = mongosoe.model("product", product);
+const Product = mongoose.model("product", product);
 
 module.exports = Product;

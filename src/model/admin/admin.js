@@ -22,7 +22,7 @@ const admin = new mongoose.Schema({
   account_type: {
     type: String,
     required: true,
-    enum: ["admin", "super_admin"],
+    enum: ["admin", "super_admin", "user"],
   },
   avatar: {
     type: String,

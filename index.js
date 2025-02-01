@@ -42,6 +42,7 @@ app.use("/api/v1/bm/admin/get/all", get_all_admin);
 // creating an admin's apis
 
 // import user's files
+const change_avatar_user = require("./src/router/auth/user/change.avatar");
 const register_user = require("./src/router/auth/user/register");
 const update_user = require("./src/router/auth/user/update");
 const login_user = require("./src/router/auth/user/login");
@@ -51,6 +52,7 @@ const get_all_user = require("./src/router/auth/user/get.all");
 // import user's files
 
 // creating an user's apis
+app.use("/api/v1/bm/user/avatar/change", change_avatar_user);
 app.use("/api/v1/bm/user/register", register_user);
 app.use("/api/v1/bm/user/update", update_user);
 app.use("/api/v1/bm/user/login", login_user);
@@ -58,6 +60,24 @@ app.use("/api/v1/bm/user/delete", delete_user);
 app.use("/api/v1/bm/user/get/one", get_one_user);
 app.use("/api/v1/bm/user/get/all", get_all_user);
 // creating an user's apis
+
+// import product's files
+const create_product = require("./src/router/product/create");
+const update_product = require("./src/router/product/update");
+const delete_product = require("./src/router/product/delete");
+const get_one_product = require("./src/router/product/get.one");
+const get_all_product = require("./src/router/product/get.all");
+const get_count_product = require("./src/router/product/get.count");
+// import product's files
+
+// creating a products apis
+app.use("/api/v1/bm/product/create", create_product);
+app.use("/api/v1/bm/product/update", update_product);
+app.use("/api/v1/bm/product/delete", delete_product);
+app.use("/api/v1/bm/product/get/all", get_all_product);
+app.use("/api/v1/bm/product/get/one", get_one_product);
+app.use("/api/v1/bm/product/get/count", get_count_product);
+// creating a products apis
 
 // import dollar's files
 const create_dollar = require("./src/router/dollar/create");

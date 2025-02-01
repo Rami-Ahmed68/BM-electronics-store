@@ -3,11 +3,18 @@ const Joi = require("joi");
 // import ApiError method
 const ApiError = require("../../../utils/error/ApiError");
 
-const validate_change_admin_avatar = (data, next) => {
+const validate_update_product_data = (data, next) => {
   // create the Schema
   const Schema = Joi.object().keys({
     admin_id: Joi.string().required(),
-    avatar_reaction: Joi.string().required(),
+    product_id: Joi.string().required(),
+    title: Joi.string().allow(""),
+    description: Joi.string().allow(""),
+    count: Joi.number().allow(""),
+    price: Joi.number().allow(""),
+    brand: Joi.string().allow(""),
+    product_number: Joi.string().allow(""),
+    images_for_delete: Joi.string().allow(""),
   });
 
   // validate the data using the created Schema
@@ -27,4 +34,4 @@ const validate_change_admin_avatar = (data, next) => {
   }
 };
 
-module.exports = validate_change_admin_avatar;
+module.exports = validate_update_product_data;

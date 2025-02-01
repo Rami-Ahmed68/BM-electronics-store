@@ -3,10 +3,10 @@ const Joi = require("joi");
 // import ApiError method
 const ApiError = require("../../../utils/error/ApiError");
 
-const validate_change_admin_avatar = (data, next) => {
+const validate_change_user_avatar = (data, next) => {
   // create the Schema
   const Schema = Joi.object().keys({
-    admin_id: Joi.string().required(),
+    user_id: Joi.string().required(),
     avatar_reaction: Joi.string().required(),
   });
 
@@ -27,4 +27,4 @@ const validate_change_admin_avatar = (data, next) => {
   }
 };
 
-module.exports = validate_change_admin_avatar;
+module.exports = validate_change_user_avatar;
