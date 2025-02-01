@@ -45,12 +45,18 @@ app.use("/api/v1/bm/admin/get/all", get_all_admin);
 const register_user = require("./src/router/auth/user/register");
 const update_user = require("./src/router/auth/user/update");
 const login_user = require("./src/router/auth/user/login");
+const delete_user = require("./src/router/auth/user/delete");
+const get_one_user = require("./src/router/auth/user/get.one");
+const get_all_user = require("./src/router/auth/user/get.all");
 // import user's files
 
 // creating an user's apis
 app.use("/api/v1/bm/user/register", register_user);
 app.use("/api/v1/bm/user/update", update_user);
 app.use("/api/v1/bm/user/login", login_user);
+app.use("/api/v1/bm/user/delete", delete_user);
+app.use("/api/v1/bm/user/get/one", get_one_user);
+app.use("/api/v1/bm/user/get/all", get_all_user);
 // creating an user's apis
 
 // import dollar's files

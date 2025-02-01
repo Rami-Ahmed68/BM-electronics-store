@@ -11,9 +11,6 @@ const User = require("../../../model/user/user");
 // import validate body data method
 const validate_create_user_data = require("../../../controls/middleware/validation/user/validate-create");
 
-// import user checks method
-const checks_exists_account = require("../../../controls/utils/account-checks/account-exists");
-
 // import hashing method
 const hashing = require("../../../controls/utils/password/hashing");
 
@@ -25,9 +22,21 @@ router.post("/", async (req, res, next) => {
     // validate body data
     validate_create_user_data(req.body, next);
 
-    // check if the email is already used
-    checks_exists_account("user", req.body.email, next);
+    // find the account by email
+    const user_email = await User.findOne({ email: req.body.email });
 
+    // check if the user_email is exists
+    if (user_email) {
+      // return success message
+      return next(
+        new ApiError(
+          JSON.stringify({
+            arabic: "عذرا الايميل مستخدم بالفعل",
+          }),
+          403
+        )
+      );
+    }
     // create a new user document
     const user = new User({
       first_name: req.body.first_name,
@@ -35,6 +44,10 @@ router.post("/", async (req, res, next) => {
       gender: req.body.gender,
       email: req.body.email,
       password: await hashing(req.body.password),
+      avatar:
+        req.body.gender == "male"
+          ? process.env.DEFAULT_Male_AVATAR
+          : process.env.DEFAULT_FEMALE_AVATAR,
     });
 
     // save the user on data base

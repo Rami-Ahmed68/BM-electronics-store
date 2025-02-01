@@ -40,7 +40,7 @@ router.post("/", login_limit, async (req, res, next) => {
     }
 
     // compare the password
-    const compared = await compare(req.body.password, user.password);
+    const compared = await compare(req.body.password, admin.password);
 
     // check if the comparing is true or note
     if (!compared) {

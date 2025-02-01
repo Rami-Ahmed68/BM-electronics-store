@@ -17,6 +17,7 @@ const user = new mongoose.Schema({
   avatar: {
     type: String,
     required: false,
+    default: "",
   },
   messages: [
     {
@@ -32,7 +33,7 @@ const user = new mongoose.Schema({
     type: String,
     required: true,
   },
-  joind_adt: {
+  joind_at: {
     type: Date,
     default: new Date(),
   },

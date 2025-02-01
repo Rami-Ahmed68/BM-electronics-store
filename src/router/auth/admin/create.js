@@ -13,9 +13,6 @@ const validate_create_admin_data = require("../../../controls/middleware/validat
 // import upload avatar file
 const upload_avatar = require("../../../controls/utils/upload/upload-admin-avatar");
 
-// import checks_exists_account method
-const checks_exists_account = require("../../../controls/utils/account-checks/account-exists");
-
 // import generate token method
 const generate_token = require("../../../controls/utils/token/generate-token");
 
@@ -27,9 +24,21 @@ router.post("/", upload_avatar, async (req, res, next) => {
     // validat the body data
     validate_create_admin_data(req.body, next);
 
-    // check if the email is exists
-    await checks_exists_account("admin", req.body.email, next);
+    // find the account by email
+    const admin_email = await Admin.findOne({ email: req.body.email });
 
+    // check if the admin_email is exists
+    if (admin_email) {
+      // return success message
+      return next(
+        new ApiErrors(
+          JSON.stringify({
+            arabic: "عذرا الايميل مستخدم بالفعل",
+          }),
+          403
+        )
+      );
+    }
     // create admin
     const admin = new Admin({
       name: req.body.name,
