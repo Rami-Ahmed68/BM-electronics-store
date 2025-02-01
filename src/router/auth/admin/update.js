@@ -18,6 +18,19 @@ const verify_token = require("../../../controls/utils/token/verify-token");
 
 router.put("/", async (req, res, next) => {
   try {
+    // check if the request has any new data
+    if (!req.body.name && !req.body.password) {
+      // returtn error
+      return next(
+        new ApiError(
+          JSON.stringify({
+            arabic: "عذرا يجب ارسال بيانات  للتعديل",
+          }),
+          403
+        )
+      );
+    }
+
     // validate body data
     validate_update_admin_data(req.body, next);
 

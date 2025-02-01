@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const _ = require("lodash");
 
 // import validate ApiError method
 const ApiError = require("../../../controls/utils/error/ApiError");
@@ -22,10 +23,10 @@ const generate_token = require("../../../controls/utils/token/generate-token");
 router.post("/", async (req, res, next) => {
   try {
     // validate body data
-    validate_create_user_data(req.body);
+    validate_create_user_data(req.body, next);
 
     // check if the email is already used
-    checks_exists_account(req.body.email, "user", next);
+    checks_exists_account("user", req.body.email, next);
 
     // create a new user document
     const user = new User({
@@ -36,6 +37,9 @@ router.post("/", async (req, res, next) => {
       password: await hashing(req.body.password),
     });
 
+    // save the user on data base
+    await user.save();
+
     // generate token
     const generated_token = generate_token(user._id, req.body.email);
 
@@ -43,7 +47,13 @@ router.post("/", async (req, res, next) => {
     const response = {
       message: {
         arabic: "تم إنشاء الحساب بنجاح",
-        user_data: _.pick(user, ["_id", "fisrt_name", "last_name", "gender"]),
+        user_data: _.pick(user, [
+          "_id",
+          "fisrt_name",
+          "last_name",
+          "gender",
+          "email",
+        ]),
         token: generated_token,
       },
     };

@@ -1,38 +1,40 @@
 const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
-// import validate api error method
+
+// imort validate ApiError
 const ApiError = require("../../../controls/utils/error/ApiError");
 
-// import admin model
-const Admin = require("../../../model/admin/admin");
-
-// import validate login body data method
-const validate_login_admin_data = require("../../../controls/middleware/validation/admin/validate-login");
-
-// import compare the passwor method
-const compare = require("../../../controls/utils/password/compaering");
+// import user model
+const User = require("../../../model/user/user");
 
 // import generate token method
 const generate_token = require("../../../controls/utils/token/generate-token");
 
+// import validate login data method
+const validate_login_user_data = require("../../../controls/middleware/validation/user/validate-login");
+
+// import compare passwords method
+const compare = require("../../../controls/utils/password/compaering");
+
 // import limiting of login
-const login_limit = require("../../../controls/utils/limit/admin/login");
+const login_limit = require("../../../controls/utils/limit/user/login");
 
 router.post("/", login_limit, async (req, res, next) => {
   try {
-    // validte body data
-    validate_login_admin_data(req.body);
+    // validate body data
+    validate_login_user_data(req.body, next);
 
-    // find the admin
-    const admin = await Admin.findOne({ email: req.body.email });
+    // find the user by admin
+    const user = await User.findOne({ email: req.body.email });
 
-    // check if the admin is exists
-    if (!admin) {
+    // check if the useris exists
+    if (!user) {
+      // return error
       return next(
         new ApiError(
           JSON.stringify({
-            arabic: "عذرا خطأ في الإيميل او كلمة المرور",
+            arabic: "عذرا خطأ في الحساب او كلمة المرور",
           }),
           404
         )
@@ -55,21 +57,22 @@ router.post("/", login_limit, async (req, res, next) => {
       );
     }
 
-    // generate a token
-    const generated_token = generate_token(admin._id, admin.email);
+    // generate token
+    const generated_token = generate_token(user._id, user.email);
 
-    // create a response
+    // create response
     const response = {
       message: {
         arabic: "تم تسجيل الدخول بنجاح",
+        user_data: _.pick(user, ["_id", "first_name", "last_name", "avatar"]),
+        token: generated_token,
       },
-      admin_data: _.pick(admin, ["_id", "name", "avatar", "email"]),
-      token: generated_token,
     };
 
-    // send the response
+    // send the response to clint
     res.status(200).send(response);
   } catch (error) {
+    // return error
     return next(
       new ApiError(
         JSON.stringify({

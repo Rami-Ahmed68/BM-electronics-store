@@ -43,10 +43,14 @@ app.use("/api/v1/bm/admin/get/all", get_all_admin);
 
 // import user's files
 const register_user = require("./src/router/auth/user/register");
+const update_user = require("./src/router/auth/user/update");
+const login_user = require("./src/router/auth/user/login");
 // import user's files
 
 // creating an user's apis
 app.use("/api/v1/bm/user/register", register_user);
+app.use("/api/v1/bm/user/update", update_user);
+app.use("/api/v1/bm/user/login", login_user);
 // creating an user's apis
 
 // import dollar's files
