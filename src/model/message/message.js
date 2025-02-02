@@ -14,11 +14,13 @@ const message = new mongoose.Schema({
     type: String,
     required: false,
   },
-  message_to: {
-    type: mongoose.Types.Schema.ObjectId,
-    required: false,
-    ref: "user",
-  },
+  message_to: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: "user",
+    },
+  ],
   created_by_type: {
     type: String,
     required: true,
@@ -30,8 +32,9 @@ const message = new mongoose.Schema({
     required: true,
   },
   created_at: {
-    type: String,
+    type: Date,
     required: true,
+    default: new Date(),
   },
 });
 

@@ -6,6 +6,9 @@ const dotenv = require("dotenv");
 dotenv.config({ path: "./config/.env" });
 app.use(express.json());
 
+// import valiadte ApiError
+const ApiError = require("./src/controls/utils/error/ApiError");
+
 // access to avatar's
 app.use("/avatars", express.static(path.join(__dirname, "./public/avatars")));
 // access to avatar's
@@ -14,6 +17,13 @@ app.use("/avatars", express.static(path.join(__dirname, "./public/avatars")));
 app.use(
   "/products-images",
   express.static(path.join(__dirname, "./public/products-images"))
+);
+// access to products-images's
+
+// access to products-images's
+app.use(
+  "/orders-images",
+  express.static(path.join(__dirname, "./public/order-images"))
 );
 // access to products-images's
 
@@ -91,7 +101,47 @@ app.use("/api/v1/bm/dollar/update", update_dollar);
 app.use("/api/v1/bm/dollar/get", get_dollar);
 // creating a dollars apis
 
+// import order's files
+const create_order = require("./src/router/order/create");
+const delete_order = require("./src/router/order/delete");
+const delete_order_admin = require("./src/router/order/admin/delete");
+const update_order = require("./src/router/order/update");
+const get_all_order = require("./src/router/order/get.all");
+const get_one_order = require("./src/router/order/get.one");
+// import order's files
+
+// creating a orders apis
+app.use("/api/v1/bm/order/create", create_order);
+app.use("/api/v1/bm/order/delete", delete_order);
+app.use("/api/v1/bm/order/admin/delete", delete_order_admin);
+app.use("/api/v1/bm/order/update", update_order);
+app.use("/api/v1/bm/order/get/all", get_all_order);
+app.use("/api/v1/bm/order/get/one", get_one_order);
+// creating a orders apis
+
+// import message's files
+const create_user_message = require("./src/router/message/user/create");
+// import message's files
+
+// creating a message's apis
+app.use("/api/v1/bm/message/user/message/create", create_user_message);
+// creating a message's apis
+
 app.use(express.urlencoded({ extended: true }));
+
+// handling not found
+app.use("*", (req, res, next) => {
+  return next(
+    new ApiError(
+      JSON.stringify({
+        english: "Invalid Api Not Found ...",
+        arabic: "... (API) عذرا لم يتم العثور على الرابط",
+      }),
+      404
+    )
+  );
+});
+// handling not found
 
 // Global error handling middlware
 app.use(Global);

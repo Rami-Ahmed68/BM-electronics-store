@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
-const order = new mongoose.Schwema({
+const order = new mongoose.Schema({
   title: {
     type: String,
     required: true,
   },
   product_id: {
-    type: mongoose.Types.Schema.ObjectId,
-    ref: "product ",
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "product",
     required: true,
   },
   count_of_products: {
@@ -23,12 +23,12 @@ const order = new mongoose.Schwema({
     required: false,
   },
   order_by: {
-    type: mongoose.Types.Schema.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "user",
     required: true,
   },
   created_at: {
-    type: String,
+    type: Date,
     required: true,
   },
 });

@@ -25,6 +25,12 @@ const user = new mongoose.Schema({
       ref: "message",
     },
   ],
+  orders: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "order",
+    },
+  ],
   email: {
     type: String,
     required: true,
@@ -32,6 +38,10 @@ const user = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+  },
+  country: {
+    type: String,
+    required: false,
   },
   joind_at: {
     type: Date,

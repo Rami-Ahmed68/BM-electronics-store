@@ -15,8 +15,22 @@ router.get("/", async (req, res, next) => {
 
     const skip = (page - 1) * limit;
 
+    // covert the tags array
+    let tags_array = req.query.tags ? req.query.tags.split("split_here") : [];
+
+    let brand_name = req.query.brand || "";
+
     // find the products by id
-    const products = await Product.find()
+    const products = await Product.find({
+      $or: [
+        {
+          tags: {
+            $in: tags_array,
+          },
+        },
+        { brand: brand_name },
+      ],
+    })
       .populate({
         path: "created_by",
         select: "_id name avatar",
