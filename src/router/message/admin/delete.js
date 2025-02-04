@@ -4,6 +4,9 @@ const router = express.Router();
 // import validate ApiError method
 const ApiError = require("../../../controls/utils/error/ApiError");
 
+// import admin model
+const Admin = require("../../../model/admin/admin");
+
 // import user model
 const User = require("../../../model/user/user");
 
@@ -14,7 +17,7 @@ const Message = require("../../../model/message/message");
 const verify_token = require("../../../controls/utils/token/verify-token");
 
 // import validate body data method
-const validate_delete_message_data = require("../../../controls/middleware/validation/message/user/validate-delete");
+const validate_delete_message_data = require("../../../controls/middleware/validation/message/admin/validate-delete");
 
 // import delete message''s images method
 const delete_old_message_image = require("../../../controls/utils/upload/delete-old-message-images");
@@ -24,16 +27,16 @@ router.post("/", async (req, res, next) => {
     // validate body data
     validate_delete_message_data(req.body, next);
 
-    // find the user
-    const user = await User.findById(req.body.user_id);
+    // find the admin
+    const admin = await Admin.findById(req.body.admin_id);
 
     // check if the use is exists
-    if (!user) {
+    if (!admin) {
       // return error
       return next(
         new ApiError(
           JSON.stringify({
-            arabic: "عذرا لم يتم التعرف على بيانات المستخدم",
+            arabic: "عذرا لم يتم التعرف على بيانات الأدمن",
           }),
           404
         )
@@ -46,8 +49,8 @@ router.post("/", async (req, res, next) => {
       next
     );
 
-    // check if the user's id in token is equal id in body
-    if (verify_token_data._id != req.body.user_id) {
+    // check if the admin's id in token is equal id in body
+    if (verify_token_data._id != req.body.admin_id) {
       // return error
       return next(
         new ApiError(
@@ -75,6 +78,22 @@ router.post("/", async (req, res, next) => {
       );
     }
 
+    // find the user
+    const user = await User.findById(req.body.user_id);
+
+    // check if the use is exists
+    if (!user) {
+      // return error
+      return next(
+        new ApiError(
+          JSON.stringify({
+            arabic: "عذرا لم يتم التعرف على بيانات المستخدم",
+          }),
+          404
+        )
+      );
+    }
+
     // delete the message's images
     if (message.images.length > 0) {
       for (let i = 0; i < message.images.length; i++) {
@@ -84,6 +103,12 @@ router.post("/", async (req, res, next) => {
 
     // delete the message's id of user's messages array
     user.messages = user.messages.filter((id) => id != req.body.message_id);
+
+    // delete the message's id of admin's messages array
+    admin.messages = admin.messages.filter((id) => id != req.body.message_id);
+
+    // save the admin
+    await admin.save();
 
     // save the user
     await user.save();

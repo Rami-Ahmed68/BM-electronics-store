@@ -14,13 +14,16 @@ const message = new mongoose.Schema({
     type: String,
     required: false,
   },
-  message_to: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      required: false,
-      ref: "user",
-    },
-  ],
+  send_to_type: {
+    type: String,
+    required: true,
+    enum: ["user", "admin"],
+  },
+  message_to: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: "send_to_type",
+  },
   created_by_type: {
     type: String,
     required: true,

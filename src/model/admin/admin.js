@@ -24,6 +24,7 @@ const admin = new mongoose.Schema({
     required: true,
     enum: ["admin", "super_admin", "user"],
   },
+  messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "message" }],
   avatar: {
     type: String,
     required: false,

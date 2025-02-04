@@ -5,13 +5,13 @@ const _ = require("lodash");
 // import validate ApiError method
 const ApiError = require("../../../controls/utils/error/ApiError");
 
-// import user model
-const User = require("../../../model/user/user");
+// import admin model
+const Admin = require("../../../model/admin/admin");
 
 router.get("/", async (req, res, next) => {
   try {
-    // check if the query has a user's id
-    if (!req.query.user_id) {
+    // check if the query has a admin's id
+    if (!req.query.admin_id) {
       // return error
       return next(
         new ApiError(
@@ -23,12 +23,12 @@ router.get("/", async (req, res, next) => {
       );
     }
 
-    // find the user
-    const user = await User.findById(req.query.user_id);
+    // find the admin
+    const admin = await Admin.findById(req.query.admin_id);
 
     // create response
     const response = {
-      user_messages_count: user.messages.length,
+      admin_messages_count: admin.messages.length,
     };
 
     // send teh response to clinet

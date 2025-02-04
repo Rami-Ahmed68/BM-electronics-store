@@ -4,8 +4,8 @@ const router = express.Router();
 // import validate ApiError method
 const ApiError = require("../../../controls/utils/error/ApiError");
 
-// import user model
-const User = require("../../../model/user/user");
+// import admin model
+const Admin = require("../../../model/admin/admin");
 
 // import message model
 const Message = require("../../../model/message/message");
@@ -14,7 +14,7 @@ const Message = require("../../../model/message/message");
 const verify_token = require("../../../controls/utils/token/verify-token");
 
 // import validate body data method
-const validate_update_message_data = require("../../../controls/middleware/validation/message/user/validate-update");
+const validate_update_message_data = require("../../../controls/middleware/validation/message/admin/validate-update");
 
 // import upload images method
 const upload_message_images = require("../../../controls/utils/upload/upload-message-images");
@@ -48,18 +48,31 @@ router.put("/", upload_message_images, async (req, res, next) => {
     // validate body data
     validate_update_message_data(req.body, next);
 
-    // find the user
-    const user = await User.findById(req.body.user_id);
+    // find the admin
+    const admin = await Admin.findById(req.body.admin_id);
 
     // check if the use is exists
-    if (!user) {
+    if (!admin) {
       // return error
       return next(
         new ApiError(
           JSON.stringify({
-            arabic: "عذرا لم يتم التعرف على بيانات المستخدم",
+            arabic: "عذرا لم يتم التعرف على بيانات الأدمن",
           }),
           404
+        )
+      );
+    }
+
+    // check if the admin can edait
+    if (admin.account_type == "user") {
+      // return error
+      return next(
+        new ApiError(
+          JSON.stringify({
+            arabic: "عذرا ليس لديك صلاحيات السوبر أدمن",
+          }),
+          403
         )
       );
     }
@@ -70,8 +83,8 @@ router.put("/", upload_message_images, async (req, res, next) => {
       next
     );
 
-    // check if the user's id in token is equal id in body
-    if (verify_token_data._id != req.body.user_id) {
+    // check if the admin's id in token is equal id in body
+    if (verify_token_data._id != req.body.admin_id) {
       // return error
       return next(
         new ApiError(

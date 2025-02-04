@@ -4,6 +4,9 @@ const router = express.Router();
 // import validate ApiError method
 const ApiError = require("../../../controls/utils/error/ApiError");
 
+// import admin model
+const Admin = require("../../../model/admin/admin");
+
 // import user model
 const User = require("../../../model/user/user");
 
@@ -14,7 +17,7 @@ const Message = require("../../../model/message/message");
 const verify_token = require("../../../controls/utils/token/verify-token");
 
 // import validate body data method
-const validate_create_message_data = require("../../../controls/middleware/validation/message/user/validate-create");
+const validate_create_message_data = require("../../../controls/middleware/validation/message/admin/validate-create");
 
 // import upload images method
 const upload_message_images = require("../../../controls/utils/upload/upload-message-images");
@@ -27,16 +30,16 @@ router.post("/", upload_message_images, async (req, res, next) => {
     // validate body data
     validate_create_message_data(req.body, next);
 
-    // find the user
-    const user = await User.findById(req.body.user_id);
+    // find the admin
+    const admin = await Admin.findById(req.body.admin_id);
 
-    // check if the use is exists
-    if (!user) {
+    // check if the admin is exists
+    if (!admin) {
       // return error
       return next(
         new ApiError(
           JSON.stringify({
-            arabic: "عذرا لم يتم التعرف على بيانات المستخدم",
+            arabic: "عذرا لم يتم التعرف على بيانات الأدمن",
           }),
           404
         )
@@ -49,8 +52,8 @@ router.post("/", upload_message_images, async (req, res, next) => {
       next
     );
 
-    // check if the user's id in token is equal id in body
-    if (verify_token_data._id != req.body.user_id) {
+    // check if the admin's id in token is equal id in body
+    if (verify_token_data._id != req.body.admin_id) {
       // return error
       return next(
         new ApiError(
@@ -83,9 +86,9 @@ router.post("/", upload_message_images, async (req, res, next) => {
       title: req.body.title,
       message_to: req.body.send_to,
       custom_message: req.body.custom_message,
-      created_by_type: "user",
-      send_to_type: "admin",
-      created_by: req.body.user_id,
+      created_by_type: "admin",
+      send_to_type: "user",
+      created_by: req.body.admin_id,
     });
 
     // check if teh request has any image
@@ -105,10 +108,10 @@ router.post("/", upload_message_images, async (req, res, next) => {
     await send_to_user.save();
 
     // add the created'e message id to
-    user.messages.push(message._id);
+    admin.messages.push(message._id);
 
-    // save the user
-    await user.save();
+    // save the admin
+    await admin.save();
 
     // save the message
     await message.save();
